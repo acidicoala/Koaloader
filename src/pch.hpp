@@ -1,12 +1,8 @@
 #pragma once
 
-
 // Windows headers
-#define WIN32_LEAN_AND_MEAN
-#define UNICODE
 
-#include <windows.h>
-
+#include <Windows.h>
 
 #include <nlohmann/json.hpp>
 

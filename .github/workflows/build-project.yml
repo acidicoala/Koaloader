@@ -93,20 +93,18 @@ jobs:
         run: tree artifacts
 
       - name: Make release zip
-        if: false && false
-        run: >
-          zip -j Koaloader-${{ env.VERSION_TAG }}.zip
-          artifacts/*-Release/*.dll
-          res/Koaloader.json
+        run: |
+          cp res/Koaloader.json artifacts/Koaloader.json
+          cd artifacts
+          zip ../Koaloader-${{ env.VERSION_TAG }}.zip ./* -r
 
       - name: Create a release draft
-        if: false && false
         uses: softprops/action-gh-release@v1
         with:
           body: '# 📑 Changelog'
           draft: true
           prerelease: false
           files: Koaloader-${{ env.VERSION_TAG }}.zip
-          name: Release v${{ env.VERSION_TAG }}
+          name: Release ${{ env.VERSION_TAG }}
           tag_name: ${{ env.VERSION_TAG }}
           fail_on_unmatched_files: true

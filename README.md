@@ -84,6 +84,7 @@ git submodule foreach git pull
 
 ### Miscellaneous notes
 
+- Version is defined in [version.txt](./res/version.txt)
 - CMake project likely needs to be reloaded after changing files in the [res](./res) directory.
 - GitHub actions will build the project on every push to `master`, but will prepare a draft release only if the last
   commit was tagged.
