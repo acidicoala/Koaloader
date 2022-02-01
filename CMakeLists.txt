@@ -4,7 +4,6 @@ set(CMAKE_CXX_STANDARD 20)
 
 # Configure vcpkg
 
-set(VCPKG_FEATURE_FLAGS "manifests,versions")
 set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake)
 if (${CMAKE_GENERATOR_PLATFORM} STREQUAL "Win32")
     set(VCPKG_TARGET_TRIPLET x86-windows-static CACHE STRING "VCPKG Target Triplet to use")
