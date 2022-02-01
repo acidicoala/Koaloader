@@ -20,7 +20,6 @@ if ($config -notmatch '^(Debug|Release|RelWithDebInfo)$') {
 
 Set-Location (Get-Item $PSScriptRoot)
 
-$Env:SCREAM_API_VERSION = "2.1.0"
 $Env:BUILD_DIR = "build\$arch\$proxy"
 if ($config -eq 'Debug') {
     $Env:VERSION_SUFFIX = "-debug"

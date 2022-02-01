@@ -26,6 +26,7 @@ jobs:
     env:
       BUILD_DIR: ${{ github.workspace }}\build\${{ matrix.arch }}\${{ matrix.proxy }}
       VCPKG_ROOT: ${{ github.workspace }}\vcpkg
+      PROXY_DLL: ${{ matrix.proxy }}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
