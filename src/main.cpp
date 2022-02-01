@@ -1,16 +1,11 @@
-#include <iostream>
-#include <Windows.h>
+#include <koaloader/koaloader.hpp>
 
-extern "C" BOOL WINAPI DllMain(HINSTANCE, DWORD reason, LPVOID) {
-    switch (reason) {
-        case DLL_PROCESS_ATTACH:
-//            init();
-            break;
-        case DLL_PROCESS_DETACH:
-//            shutdown();
-            break;
-        default:
-            break;
+[[maybe_unused]]
+BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID) {
+    if (reason == DLL_PROCESS_ATTACH) {
+        koaloader::init(instance);
+    } else if (reason == DLL_PROCESS_DETACH) {
+        koaloader::shutdown();
     }
 
     return TRUE;
