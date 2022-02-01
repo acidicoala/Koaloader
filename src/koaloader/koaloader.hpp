@@ -39,15 +39,3 @@ extern "C" BOOL __cdecl __##NAME(BOOST_PP_SEQ_FOR_EACH_I(WRAP_declare_param, ~, 
     static auto func = FnCast(GetProcAddress(original_module, #NAME), __##NAME); \
     return func(BOOST_PP_SEQ_FOR_EACH_I(WRAP_forward_param, ~, BOOST_PP_TUPLE_TO_SEQ((__VA_ARGS__)))); \
 }
-
-#if PROXY_DLL_VERSION
-
-constexpr auto ORIGINAL_MODULE_NAME = "version.dll";
-
-#endif
-
-#if PROXY_DLL_XINPUT9_1_0
-
-constexpr auto ORIGINAL_MODULE_NAME = "xinput9_1_0.dll";
-
-#endif

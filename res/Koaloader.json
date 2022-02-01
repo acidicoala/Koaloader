@@ -1,8 +1,4 @@
 {
   "logging": true,
-  "modules": [
-    {
-      "path": "Target.dll"
-    }
-  ]
+  "modules": []
 }

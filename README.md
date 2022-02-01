@@ -2,17 +2,79 @@
 
 A collections of DLLs that use search order hijacking to automatically inject specified DLLs.
 
-## 📚 Proxy modules
+## 🚀 Usage
 
-- Version.dll
+### 📚 Supported proxies
 
-## 🔡 Commands
+- **version.dll**
+- **xinput9_1_0.dll**
 
-Clone this project:
+## ⚙ Configuration
 
-```shell
+Koaloader comes with a configuration file `Koaloader.json`, which will be the same for any proxy dll. The config file
+conforms to the standard JSON format. The description of each available option is presented below:
+
+* `logging`: Enables or disables logging into a ScreamAPI.log file. Possible values: `true`, `false` (default).
+* `modules`: An array of objects that describe modules that will be loaded in the order they were defined. Each object
+  has the following properties:
+    * `path`:  A string that specifies absolute or relative path
+
+You can refer to the following config as an example.
+
+> Here we have defined 2 DLLs to load:
+>
+> * `target.dll` - via a path that is relative to the current working directory of the executable
+> * `eucalyptus.dll` - via an absolute path.
+>
+> ```json
+> {
+>   "logging": true,
+>   "modules": [
+>     {
+>       "path": "target.dll"
+>     },
+>     {
+>       "path": "C:/users/acidicoala/eucalyptus.dll"
+>     }
+>   ]
+> }
+> ```
+
+## 🛠 Development
+
+Clone the project with its submodules:
+
+```powershell
 git clone --recursive https://github.com/acidicoala/Koaloader.git
 ```
+
+Run the build script with desired parameters:
+
+```shell
+./build.ps1 $Arch $Proxy $Config
+```
+
+* `$Arch` - Program architecture. Valid values:
+    * `32`
+    * `64`
+* `$Proxy` - Proxy DLL to build. Valid values:
+    * `version`
+    * `xinput9_1_0`
+* `$Config` - Build configuration. Valid values:
+    * `Debug`
+    * `Release`
+    * `RelWithDebInfo`
+
+Example:
+
+```shell
+./build.ps1 64 xinput9_1_0 Release
+```
+
+The final DLL will be located at
+`build\$Arch\$Proxy\$Config`
+
+### 🔡 Commands
 
 Update all submodules:
 
@@ -20,9 +82,11 @@ Update all submodules:
 git submodule foreach git pull
 ```
 
-## 🛠 Development notes
+### Miscellaneous notes
 
-- After changing [version.txt](./res/version.txt), CMake needs to be manually synchronized.
+- CMake project likely needs to be reloaded after changing files in the [res](./res) directory.
+- GitHub actions will build the project on every push to `master`, but will prepare a draft release only if the last
+  commit was tagged.
 
 ## 👋 Acknowledgements
 

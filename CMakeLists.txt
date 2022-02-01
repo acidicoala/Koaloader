@@ -2,16 +2,6 @@ cmake_minimum_required(VERSION 3.21)
 
 set(CMAKE_CXX_STANDARD 20)
 
-set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
-set(RES_DIR ${CMAKE_SOURCE_DIR}/res)
-set(GEN_DIR ${PROJECT_BINARY_DIR}/generated)
-
-set(KOALABOX_SRC_DIR ${CMAKE_SOURCE_DIR}/KoalaBox/src)
-
-set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-
-file(STRINGS "${RES_DIR}/version.txt" PROJECT_VERSION_TEXT)
-
 # Configure vcpkg
 
 set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake)
@@ -25,21 +15,35 @@ endif ()
 
 # Configure project
 
+set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
+set(RES_DIR ${CMAKE_SOURCE_DIR}/res)
+
+set(KOALABOX_SRC_DIR ${CMAKE_SOURCE_DIR}/KoalaBox/src)
+
+file(STRINGS "${RES_DIR}/version.txt" PROJECT_VERSION_TEXT)
+
 project(Koaloader VERSION "${PROJECT_VERSION_TEXT}.0")
 
 set(PROJECT_VERSION_SHORT ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH})
 set(VERSION_SUFFIX $ENV{VERSION_SUFFIX})
 
-set(PROXY_DLL_VERSION $ENV{PROXY_DLL_VERSION})
-set(PROXY_DLL_XINPUT9_1_0 $ENV{PROXY_DLL_XINPUT9_1_0})
 
-if (${PROXY_DLL_VERSION})
-    set(DLL_NAME "version")
-elseif (${PROXY_DLL_XINPUT9_1_0})
-    set(DLL_NAME "xinput9_1_0")
-else ()
-    message(FATAL_ERROR "At least one PROXY_DLL_* variable must be set")
-endif ()
+
+set(PROXY_DLL $ENV{PROXY_DLL})
+set(DLL_NAME ${PROXY_DLL})
+
+set(VALID_PROXIES version xinput9_1_0)
+if (NOT "${PROXY_DLL}" IN_LIST VALID_PROXIES)
+    message(FATAL_ERROR "A valid PROXY_DLL variable must be set")
+endif()
+
+string(TOUPPER ${PROXY_DLL} PROXY_DLL)
+string(TOLOWER ${PROXY_DLL} DLL_NAME)
+
+set(GEN_DIR ${PROJECT_BINARY_DIR}/generated)
+
+
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 # Substitute variables in build and runtime config files
 
@@ -58,6 +62,7 @@ add_library(
         ${SRC_DIR}/koaloader/koaloader.cpp
         ${SRC_DIR}/config/config.cpp
         ${SRC_DIR}/exports/version.cpp
+        ${SRC_DIR}/exports/xinput9_1_0.cpp
 
         ## Dependencies
         ${KOALABOX_SRC_DIR}/koalabox.cpp

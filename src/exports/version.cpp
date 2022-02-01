@@ -2,7 +2,7 @@
 
 using namespace koaloader;
 
-#if PROXY_DLL_VERSION
+#ifdef PROXY_DLL_VERSION
 
 FUNC_IMPL(BOOL, GetFileVersionInfoA, ARGS(LPCSTR, DWORD, DWORD, LPVOID))
 FUNC_IMPL(BOOL, GetFileInformationByHandle, ARGS(HANDLE, LPBY_HANDLE_FILE_INFORMATION))

@@ -26,7 +26,7 @@ void koaloader::init(HMODULE self_module) {
 
     logger::info("🐨 Koaloader 📥 v{}", PROJECT_VERSION);
 
-    auto original_module_path = get_system_module_path(ORIGINAL_MODULE_NAME);
+    auto original_module_path = get_system_module_path(DLL_NAME".dll");
     original_module = win_util::load_library(original_module_path);
 
     for (const auto& module: config.modules) {
