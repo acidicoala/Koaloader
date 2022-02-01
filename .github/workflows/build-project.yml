@@ -16,9 +16,11 @@ jobs:
         proxy: [ version, xinput9_1_0 ]
         include:
           - arch: 32
+            platform: Win32
             term: amd64_x86
 
           - arch: 64
+            platform: x64
             term: amd64
 
     env:
