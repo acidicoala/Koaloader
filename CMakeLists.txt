@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 # Configure vcpkg
 
-set(VCPKG_FEATURE_FLAGS "versions")
+set(VCPKG_FEATURE_FLAGS "manifests,versions")
 set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake)
 if (${CMAKE_GENERATOR_PLATFORM} STREQUAL "Win32")
     set(VCPKG_TARGET_TRIPLET x86-windows-static CACHE STRING "VCPKG Target Triplet to use")
@@ -27,8 +27,6 @@ project(Koaloader VERSION "${PROJECT_VERSION_TEXT}.0")
 
 set(PROJECT_VERSION_SHORT ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH})
 set(VERSION_SUFFIX $ENV{VERSION_SUFFIX})
-
-
 
 set(PROXY_DLL $ENV{PROXY_DLL})
 set(DLL_NAME ${PROXY_DLL})
