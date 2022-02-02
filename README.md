@@ -1,6 +1,6 @@
 # 🐨 Koaloader 📥
 
-A collections of DLLs that use search order hijacking to automatically inject specified DLLs.
+A collection of DLLs that use search order hijacking to automatically inject specified DLLs.
 
 ## 🚀 Usage
 
