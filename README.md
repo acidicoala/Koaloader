@@ -106,7 +106,7 @@ git submodule foreach git pull
 
 ## 👋 Acknowledgements
 
-KoalaBox makes use of the following open source projects:
+This project makes use of the following open source projects:
 
 - [spdlog](https://github.com/gabime/spdlog)
 - [JSON for Modern C++](https://github.com/nlohmann/json)
