@@ -17,7 +17,7 @@ namespace koaloader {
         return (T) fnToCast;
     }
 
-    void init(HMODULE module);
+    void init(HMODULE self_module);
 
     void shutdown();
 }

@@ -13,9 +13,9 @@ Vector<HMODULE> injected_modules;
 void koaloader::init(HMODULE self_module) {
     DisableThreadLibraryCalls(self_module);
 
-    auto self_directory = util::get_module_dir(self_module);
+    const auto self_directory = util::get_module_dir(self_module);
 
-    auto config = config::read(self_directory / "Koaloader.json");
+    const auto config = config::read(self_directory / "Koaloader.json");
 
     if (config.logging) {
         logger::init(self_directory / "Koaloader.log");
@@ -23,13 +23,13 @@ void koaloader::init(HMODULE self_module) {
 
     logger::info("🐨 Koaloader 📥 v{}", PROJECT_VERSION);
 
-    auto original_module_path = win_util::get_system_directory() / DLL_NAME".dll";
+    const auto original_module_path = win_util::get_system_directory() / DLL_NAME".dll";
     original_module = win_util::load_library(original_module_path);
 
     for (const auto& module: config.modules) {
-        auto path = std::filesystem::absolute(module.path);
+        const auto path = std::filesystem::absolute(module.path);
 
-        auto handle = win_util::load_library(path);
+        const auto handle = win_util::load_library(path);
 
         injected_modules.push_back(handle);
 

@@ -40,7 +40,6 @@ string(TOLOWER ${PROXY_DLL} DLL_NAME)
 
 set(GEN_DIR ${PROJECT_BINARY_DIR}/generated)
 
-
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 # Substitute variables in build and runtime config files
