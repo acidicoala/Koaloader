@@ -42,10 +42,17 @@ You can refer to the following config as an example.
 
 ## 🛠 Development
 
+### 🚥 Prerequisites
+
+* Git v2.13 or newer
+* CMake 3.21 or newer
+* VS 2019 Build Tools/IDE with Desktop Development with C++ installed.
+
+___
 Clone the project with its submodules:
 
 ```powershell
-git clone --recursive https://github.com/acidicoala/Koaloader.git
+git clone --recurse-submodules https://github.com/acidicoala/Koaloader.git
 ```
 
 Run the build script with desired parameters:
