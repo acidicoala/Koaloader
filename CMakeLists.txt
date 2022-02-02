@@ -30,7 +30,7 @@ set(VERSION_SUFFIX $ENV{VERSION_SUFFIX})
 set(PROXY_DLL $ENV{PROXY_DLL})
 set(DLL_NAME ${PROXY_DLL})
 
-set(VALID_PROXIES version xinput9_1_0)
+set(VALID_PROXIES dinput8 version xinput9_1_0)
 if (NOT "${PROXY_DLL}" IN_LIST VALID_PROXIES)
     message(FATAL_ERROR "A valid PROXY_DLL variable must be set")
 endif()
@@ -59,6 +59,7 @@ add_library(
         ${SRC_DIR}/main.cpp
         ${SRC_DIR}/koaloader/koaloader.cpp
         ${SRC_DIR}/config/config.cpp
+        ${SRC_DIR}/exports/dinput8.cpp
         ${SRC_DIR}/exports/version.cpp
         ${SRC_DIR}/exports/xinput9_1_0.cpp
 

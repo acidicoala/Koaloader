@@ -1,6 +1,7 @@
 # Usage examples:
-#   build.ps1 32 Debug version
-#   build.ps1 64 Release xinput9_1_0
+#   build.ps1 32 version Debug
+#   build.ps1 64 xinput9_1_0 Release
+#   build.ps1 64 dinput8 Release
 
 $arch = $args[0]
 if ($arch -notmatch '^(32|64)$') {
@@ -9,7 +10,7 @@ if ($arch -notmatch '^(32|64)$') {
 $platform = If ($arch -eq '32') { 'Win32' } Else { 'x64' }
 
 $proxy = $args[1]
-if ($proxy -notmatch '^(version|xinput9_1_0)$') {
+if ($proxy -notmatch '^(dinput8|version|xinput9_1_0)$') {
     throw "Invalid proxy dll. Consult README for list of valid modules."
 }
 

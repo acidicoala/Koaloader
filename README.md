@@ -4,8 +4,11 @@ A collections of DLLs that use search order hijacking to automatically inject sp
 
 ## 🚀 Usage
 
+Simply place one of the proxy dlls where a process is attempting to load it and setup the config file to load the DLLs that you wish to inject.
+
 ### 📚 Supported proxies
 
+- **dinput8.dll**
 - **version.dll**
 - **xinput9_1_0.dll**
 
@@ -65,6 +68,7 @@ Run the build script with desired parameters:
     * `32`
     * `64`
 * `$Proxy` - Proxy DLL to build. Valid values:
+    * `dinput8`
     * `version`
     * `xinput9_1_0`
 * `$Config` - Build configuration. Valid values:
