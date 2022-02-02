@@ -92,17 +92,17 @@ Update all submodules:
 git submodule foreach git pull
 ```
 
-Push commits and tags simultaneously
-```shell
-git push --atomic origin master v*.*.*
-```
-
 ### Miscellaneous notes
 
 - Version is defined in [version.txt](./res/version.txt)
 - CMake project likely needs to be reloaded after changing files in the [res](./res) directory.
 - GitHub actions will build the project on every push to `master`, but will prepare a draft release only if the last
   commit was tagged.
+- Proxy dll checklist:
+  - [ ] [build-project.yml](.github/workflows/build-project.yml) 
+  - [ ] [exports](src/exports) 
+  - [ ] [build.ps1](build.ps1) 
+  - [ ] [CMakeLists.txt](CMakeLists.txt) 
 
 ## 👋 Acknowledgements
 

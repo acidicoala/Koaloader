@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         arch: [ 32, 64 ]
-        proxy: [ version, xinput9_1_0 ]
+        proxy: [ dinput8, version, xinput9_1_0 ]
         include:
           - arch: 32
             platform: Win32
