@@ -14,7 +14,7 @@ A collections of DLLs that use search order hijacking to automatically inject sp
 Koaloader comes with a configuration file `Koaloader.json`, which will be the same for any proxy dll. The config file
 conforms to the standard JSON format. The description of each available option is presented below:
 
-* `logging`: Enables or disables logging into a ScreamAPI.log file. Possible values: `true`, `false` (default).
+* `logging`: Enables or disables logging into a `Koaloader.log` file. Possible values: `true`, `false` (default).
 * `modules`: An array of objects that describe modules that will be loaded in the order they were defined. Each object
   has the following properties:
     * `path`:  A string that specifies absolute or relative path
