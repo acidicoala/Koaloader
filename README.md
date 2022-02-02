@@ -88,9 +88,13 @@ The final DLL will be located at
 ### 🔡 Commands
 
 Update all submodules:
-
 ```shell
 git submodule foreach git pull
+```
+
+Push commits and tags simultaneously
+```shell
+git push --atomic origin master v*.*.*
 ```
 
 ### Miscellaneous notes
