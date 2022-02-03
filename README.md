@@ -4,7 +4,8 @@ A collection of DLLs that use search order hijacking to automatically inject spe
 
 ## 🚀 Usage
 
-Simply place one of the proxy dlls where a process is attempting to load it and setup the config file to load the DLLs that you wish to inject.
+Simply place one of the proxy dlls where a process is attempting to load it and setup the config file to load the DLLs
+that you wish to inject.
 
 ### 📚 Supported proxies
 
@@ -18,7 +19,11 @@ Koaloader comes with a configuration file `Koaloader.json`, which will be the sa
 conforms to the standard JSON format. The description of each available option is presented below:
 
 * `logging`: Enables or disables logging into a `Koaloader.log` file. Possible values: `true`, `false` (default).
-* `modules`: An array of objects that describe modules that will be loaded in the order they were defined. Each object has the following properties:
+* `targets`: A list of strings that specify targeted executables. Koaloader will inject modules if, and only if:
+    * The list of targets is empty
+    * The list of targets includes the executable that has loaded Koaloader.
+* `modules`: A list of objects that describe modules that will be loaded in the order they were defined. Each object has
+  the following properties:
     * `path`:  A string that specifies absolute or relative path
 
 You can refer to the following config as an example.
@@ -31,6 +36,7 @@ You can refer to the following config as an example.
 > ```json
 > {
 >   "logging": true,
+>   "targets": [ "program32.exe", "program64.exe" ],
 >   "modules": [
 >     {
 >       "path": "target.dll"
@@ -87,6 +93,7 @@ The final DLL will be located at
 ### 🔡 Commands
 
 Update all submodules:
+
 ```shell
 git submodule foreach git pull
 ```
@@ -98,10 +105,10 @@ git submodule foreach git pull
 - GitHub actions will build the project on every push to `master`, but will prepare a draft release only if the last
   commit was tagged.
 - Proxy dll checklist:
-  - [ ] [build-project.yml](.github/workflows/build-project.yml) 
-  - [ ] [exports](src/exports) 
-  - [ ] [build.ps1](build.ps1) 
-  - [ ] [CMakeLists.txt](CMakeLists.txt) 
+    - [ ] [build-project.yml](.github/workflows/build-project.yml)
+    - [ ] [exports](src/exports)
+    - [ ] [build.ps1](build.ps1)
+    - [ ] [CMakeLists.txt](CMakeLists.txt)
 
 ## 👋 Acknowledgements
 
