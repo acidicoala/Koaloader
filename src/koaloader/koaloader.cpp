@@ -46,6 +46,8 @@ void inject_modules(const config::Config& config) {
 void koaloader::init(HMODULE self_module) {
     DisableThreadLibraryCalls(self_module);
 
+    koalabox::project_name = "Koaloader";
+
     const auto self_directory = util::get_module_dir(self_module);
 
     const auto config = config::read(self_directory / "Koaloader.json");
