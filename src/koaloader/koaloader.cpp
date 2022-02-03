@@ -58,8 +58,6 @@ void koaloader::init(HMODULE self_module) {
 
     logger::info("🐨 Koaloader 📥 v{}", PROJECT_VERSION);
 
-    util::panic("Test title", "Test message {}", 123);
-
     const auto original_module_path = win_util::get_system_directory() / DLL_NAME".dll";
     koaloader::original_module = win_util::load_library(original_module_path);
     logger::info("📚 Loaded original library from: '{}'", original_module_path.string());
