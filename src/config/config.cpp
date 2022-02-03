@@ -1,5 +1,5 @@
 #include "config.hpp"
-#include "util/util.hpp"
+#include "koalabox/util/util.hpp"
 
 #include <fstream>
 #include <memory>

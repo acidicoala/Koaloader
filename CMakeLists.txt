@@ -64,10 +64,10 @@ add_library(
         ${SRC_DIR}/exports/xinput9_1_0.cpp
 
         ## Dependencies
-        ${KOALABOX_SRC_DIR}/koalabox.cpp
-        ${KOALABOX_SRC_DIR}/logger/logger.cpp
-        ${KOALABOX_SRC_DIR}/win_util/win_util.cpp
-        ${KOALABOX_SRC_DIR}/util/util.cpp
+        ${KOALABOX_SRC_DIR}/koalabox/koalabox.cpp
+        ${KOALABOX_SRC_DIR}/koalabox/logger/logger.cpp
+        ${KOALABOX_SRC_DIR}/koalabox/win_util/win_util.cpp
+        ${KOALABOX_SRC_DIR}/koalabox/util/util.cpp
 
         ## Resources
         ${GEN_DIR}/version.rc
