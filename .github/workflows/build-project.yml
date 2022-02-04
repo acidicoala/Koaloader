@@ -5,6 +5,7 @@ on:
       - '.idea/**'
       - 'README.md'
       - 'build.ps1'
+      - '.editorconfig'
 
 jobs:
   build-project:
