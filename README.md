@@ -24,7 +24,7 @@ conforms to the standard JSON format. The description of each available option i
     * The list of targets includes the executable that has loaded Koaloader.
 * `modules`: A list of objects that describe modules that will be loaded in the order they were defined. Each object has
   the following properties:
-    * `path`:  A string that specifies absolute or relative path
+    * `path`:  A string that specifies absolute or relative path to a DLL. The relative path is with respect to the working directory, which may be different from the executable directory.
 
 You can refer to the following config as an example.
 

@@ -20,6 +20,7 @@ set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
 set(RES_DIR ${CMAKE_SOURCE_DIR}/res)
 
 set(KOALABOX_SRC_DIR ${CMAKE_SOURCE_DIR}/KoalaBox/src)
+set(KOALABOX_RES_DIR ${CMAKE_SOURCE_DIR}/KoalaBox/res)
 
 file(STRINGS "${RES_DIR}/version.txt" PROJECT_VERSION_TEXT)
 
@@ -49,7 +50,10 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 configure_file(${RES_DIR}/build_config.gen.h ${GEN_DIR}/build_config.h)
 
 ## Generate version resource file
-configure_file(${RES_DIR}/version.gen.rc ${GEN_DIR}/version.rc)
+set(DLL_VERSION_FILE_DESC "https://github.com/acidicoala/Koaloader")
+set(DLL_VERSION_PRODUCT_NAME "Koaloader")
+set(DLL_VERSION_INTERNAL_NAME "${DLL_VERSION_PRODUCT_NAME}")
+configure_file(${KOALABOX_RES_DIR}/version.gen.rc ${GEN_DIR}/version.rc)
 
 # Build the library
 
