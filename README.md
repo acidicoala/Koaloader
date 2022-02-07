@@ -2,6 +2,8 @@
 
 A collection of DLLs that use search order hijacking to automatically inject specified DLLs.
 
+[Official forum topic](https://cs.rin.ru/forum/viewtopic.php?p=2536753#p2536753)
+
 ## 🚀 Usage
 
 Simply place one of the proxy dlls where a process is attempting to load it and setup the config file to load the DLLs
