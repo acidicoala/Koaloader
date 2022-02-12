@@ -70,6 +70,9 @@ jobs:
         with:
           arch: ${{ matrix.term }}
 
+      - name: Print system DLLs
+      - run: ls C:/Windows/System32
+
       - name: Generate build files & build the project
         run: ./build.ps1 ${{ matrix.arch }} ${{ matrix.proxy_dll }} ${{ matrix.config }}
 
