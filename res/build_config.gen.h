@@ -1,6 +1,0 @@
-#pragma once
-
-#define PROJECT_VERSION "${PROJECT_VERSION_SHORT}${VERSION_SUFFIX}"
-
-#define DLL_NAME "${DLL_NAME}"
-#define PROXY_DLL_${PROXY_DLL}

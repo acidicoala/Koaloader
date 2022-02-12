@@ -3,12 +3,34 @@ on: push
 
 jobs:
   build-project:
-    name: Build ${{ matrix.proxy }} for ${{ matrix.arch }}-bit architecture
+    name: Build ${{ matrix.proxy_dll }} for ${{ matrix.arch }}-bit architecture
     runs-on: windows-latest
     strategy:
       matrix:
         arch: [ 32, 64 ]
-        proxy: [ dinput8, version, xinput9_1_0 ]
+        config: [ Release ]
+        proxy_dll:
+          - audioses
+          - d3d9
+          - d3d10
+          - d3d11
+          - dinput8
+          - dwmapi
+          - dxgi
+          - glu32
+          - hid
+          - iphlpapi
+          - msasn1
+          - nvapi64
+          - opengl32
+          - profapi
+          - propsys
+          - umpdc
+          - version
+          - winhttp
+          - wldp
+          - winmm
+          - xinput9_1_0
         include:
           - arch: 32
             platform: Win32
@@ -19,9 +41,10 @@ jobs:
             term: amd64
 
     env:
-      BUILD_DIR: ${{ github.workspace }}\build\${{ matrix.arch }}\${{ matrix.proxy }}
+      BUILD_DIR: ${{ github.workspace }}\build\${{ matrix.arch }}\${{ matrix.proxy_dll }}
       VCPKG_ROOT: ${{ github.workspace }}\vcpkg
-      PROXY_DLL: ${{ matrix.proxy }}
+      VCPKG_DISABLE_METRICS: true
+      PROXY_DLL: ${{ matrix.proxy_dll }}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
@@ -47,17 +70,14 @@ jobs:
         with:
           arch: ${{ matrix.term }}
 
-      - name: Generate build files
-        run: cmake -G "Visual Studio 16 2019" -A ${{ matrix.platform }} -B ${{ env.BUILD_DIR }}
-
-      - name: Build the project
-        run: cmake --build ${{ env.BUILD_DIR }} --config Release
+      - name: Generate build files & build the project
+        run: ./build.ps1 ${{ matrix.arch }} ${{ matrix.proxy_dll }} ${{ matrix.config }}
 
       - name: Upload the binary file
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.proxy }}-${{ matrix.arch }}
-          path: ${{ env.BUILD_DIR }}\Release\${{ matrix.proxy }}.dll
+          name: ${{ matrix.proxy_dll }}-${{ matrix.arch }}
+          path: ${{ env.BUILD_DIR }}\${{ matrix.config }}\${{ matrix.proxy_dll }}.dll
 
   package-project:
     name: Package the artifacts into a release zip

@@ -10,8 +10,8 @@ if ($arch -notmatch '^(32|64)$') {
 $platform = If ($arch -eq '32') { 'Win32' } Else { 'x64' }
 
 $proxy = $args[1]
-if ($proxy -notmatch '^(dinput8|version|xinput9_1_0)$') {
-    throw "Invalid proxy dll. Consult README for list of valid modules."
+if ($proxy -eq '') {
+    throw "Proxy DLL cannot be empty."
 }
 
 $config = $args[2]

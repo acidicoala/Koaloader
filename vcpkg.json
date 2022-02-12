@@ -4,7 +4,6 @@
   "license": "0BSD",
   "dependencies": [
     "spdlog",
-    "nlohmann-json",
-    "boost-preprocessor"
+    "nlohmann-json"
   ]
 }

@@ -11,9 +11,32 @@ that you wish to inject.
 
 ### 📚 Supported proxies
 
-- **dinput8.dll**
-- **version.dll**
-- **xinput9_1_0.dll**
+<details><summary>Click to see all proxies</summary>
+
+- [x] **audioses.dll**
+- [x] **d3d9.dll**
+- [x] **d3d10.dll**
+- [x] **d3d11.dll**
+- [x] **dinput8.dll**
+- [x] **dwmapi.dll**
+- [x] **dxgi.dll**
+- [x] **glu32.dll**
+- [x] **hid.dll**
+- [x] **iphlpapi.dll**
+- [x] **msasn1.dll**
+- [x] **nvapi64.dll**
+- [x] **opengl32.dll**
+- [x] **profapi.dll**
+- [x] **propsys.dll**
+- [x] **umpdc.dll**
+- [x] **version.dll**
+- [x] **winhttp.dll**
+- [x] **wldp.dll**
+- [x] **winmm.dll**
+- [x] **xinput9_1_0.dll**
+</details>
+
+> ➕ If you wish to see another proxy DLL supported, feel free to create a new issue, specifying the DLL name and describing its use case.
 
 ## ⚙ Configuration
 
@@ -74,10 +97,7 @@ Run the build script with desired parameters:
 * `$Arch` - Program architecture. Valid values:
     * `32`
     * `64`
-* `$Proxy` - Proxy DLL to build. Valid values:
-    * `dinput8`
-    * `version`
-    * `xinput9_1_0`
+* `$Proxy` - Proxy DLL to build. Any system DLL is valid.
 * `$Config` - Build configuration. Valid values:
     * `Debug`
     * `Release`
@@ -86,31 +106,20 @@ Run the build script with desired parameters:
 Example:
 
 ```shell
-./build.ps1 64 xinput9_1_0 Release
+./build.ps1 64 d3d11 Release
 ```
 
 The final DLL will be located at
 `build\$Arch\$Proxy\$Config`
 
-### 🔡 Commands
-
-Update all submodules:
-
-```shell
-git submodule foreach git pull
-```
 
 ### Miscellaneous notes
 
-- Version is defined in [version.txt](./res/version.txt)
+- Version is defined in [CMakeLists.txt](./CMakeLists.txt)
 - CMake project likely needs to be reloaded after changing files in the [res](./res) directory.
 - GitHub actions will build the project on every push to `master`, but will prepare a draft release only if the last
   commit was tagged.
-- Proxy dll checklist:
-    - [ ] [build-project.yml](.github/workflows/build-project.yml)
-    - [ ] [exports](src/exports)
-    - [ ] [build.ps1](build.ps1)
-    - [ ] [CMakeLists.txt](CMakeLists.txt)
+- Proxy dll need to be defined in [build-project.yml](.github/workflows/build-project.yml)
 
 ## 👋 Acknowledgements
 

@@ -46,8 +46,6 @@ void inject_modules(const config::Config& config) {
 void koaloader::init(HMODULE self_module) {
     DisableThreadLibraryCalls(self_module);
 
-    koalabox::project_name = "Koaloader";
-
     const auto self_directory = util::get_module_dir(self_module);
 
     const auto config = config::read(self_directory / "Koaloader.json");
@@ -57,10 +55,6 @@ void koaloader::init(HMODULE self_module) {
     }
 
     logger::info("🐨 Koaloader 📥 v{}", PROJECT_VERSION);
-
-    const auto original_module_path = win_util::get_system_directory() / DLL_NAME".dll";
-    koaloader::original_module = win_util::load_library(original_module_path);
-    logger::info("📚 Loaded original library from: '{}'", original_module_path.string());
 
     if (is_loaded_by_target(config)) {
         inject_modules(config);
