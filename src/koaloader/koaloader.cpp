@@ -6,8 +6,6 @@
 
 using namespace koalabox;
 
-HMODULE koaloader::original_module = nullptr;
-
 Vector<HMODULE> injected_modules;
 
 bool is_loaded_by_target(const config::Config& config) {
@@ -73,8 +71,6 @@ void koaloader::shutdown() {
     }
 
     injected_modules.clear();
-
-    win_util::free_library(original_module);
 
     logger::info("💀 Shutdown complete");
 }
