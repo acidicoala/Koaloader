@@ -112,6 +112,10 @@ Example:
 The final DLL will be located at
 `build\$Arch\$Proxy\$Config`
 
+### Potential improvements
+
+- [ ] DLLs with unnamed exports (by ordinal)
+- [ ] DLLs that are missing from System32 directory
 
 ### Miscellaneous notes
 

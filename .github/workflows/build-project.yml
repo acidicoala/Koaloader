@@ -21,11 +21,11 @@ jobs:
           - hid
           - iphlpapi
           - msasn1
-          - nvapi64
+          # - nvapi64 # Missing from GitHub's Windows runner
           - opengl32
           - profapi
           - propsys
-          - umpdc
+          # - umpdc # Missing ...
           - version
           - winhttp
           - wldp
