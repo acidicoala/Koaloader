@@ -4,11 +4,9 @@ include(KoalaBox/KoalaBox.cmake)
 
 configure_globals(KoalaBox)
 
-project(Koaloader VERSION "2.0.0")
+project(Koaloader VERSION 2.0.0)
 
 set(PROXY_DLL $ENV{PROXY_DLL})
-
-configure_build_config(extra_build_config)
 
 configure_version_resource("https://github.com/acidicoala/Koaloader")
 
@@ -19,15 +17,26 @@ configure_linker_exports(
     ${SRC_DIR}
 )
 
+configure_build_config()
+
 configure_library(
     SHARED
-    ${SRC_DIR}/config/config.cpp
+
     ${SRC_DIR}/koaloader/koaloader.cpp
     ${SRC_DIR}/main.cpp
+
+    ${KOALABOX_SRC_DIR}/koalabox/loader/loader.cpp
+    ${KOALABOX_SRC_DIR}/koalabox/file_logger/file_logger.cpp
+    ${KOALABOX_SRC_DIR}/koalabox/util/util.cpp
+    ${KOALABOX_SRC_DIR}/koalabox/win_util/win_util.cpp
+
+    ${LINKER_EXPORTS}
 )
+
+configure_precompile_headers(${CMAKE_PROJECT_NAME} ${SRC_DIR}/pch.hpp)
 
 configure_output_name(${PROXY_DLL})
 
 configure_include_directories()
 
-configure_dependencies(spdlog nlohmann_json)
+configure_dependencies(${CMAKE_PROJECT_NAME} spdlog nlohmann_json)

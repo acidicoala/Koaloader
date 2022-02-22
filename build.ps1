@@ -28,6 +28,6 @@ if ($config -eq 'Debug') {
 
 $Env:PROXY_DLL = $proxy
 
-cmake -G "Visual Studio 16 2019" -A $platform -B "$Env:BUILD_DIR"
+cmake -G "Visual Studio 17 2022" -A $platform -B "$Env:BUILD_DIR"
 
 cmake --build "$Env:BUILD_DIR" --config $config

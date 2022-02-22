@@ -1,12 +1,27 @@
 #pragma once
 
-#include <Windows.h>
-
 #include <build_config.h>
 
 namespace koaloader {
+    using namespace koalabox;
 
-    void init(HMODULE self_module);
+    struct Module {
+        String path;
+
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(Module, path)
+    };
+
+    struct Config {
+        bool logging = false;
+        Vector <String> targets;
+        Vector <Module> modules;
+
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(Config, logging, targets, modules)
+    };
+
+    extern Config config;
+
+    void init(const HMODULE& self_module);
 
     void shutdown();
 }

@@ -4,7 +4,7 @@ on: push
 jobs:
   build-project:
     name: Build ${{ matrix.proxy_dll }} for ${{ matrix.arch }}-bit architecture
-    runs-on: windows-latest
+    runs-on: windows-2022
     strategy:
       matrix:
         arch: [ 32, 64 ]
