@@ -10,7 +10,25 @@ jobs:
     with:
       modules: >-
         [
-          "version"
+          "audioses",
+          "d3d9",
+          "d3d10",
+          "d3d11",
+          "dinput8",
+          "dwmapi",
+          "dxgi",
+          "glu32",
+          "hid",
+          "iphlpapi",
+          "msasn1",
+          "opengl32",
+          "profapi",
+          "propsys",
+          "version",
+          "winhttp",
+          "wldp",
+          "winmm",
+          "xinput9_1_0"
         ]
         
       zip_command: >
