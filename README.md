@@ -95,16 +95,16 @@ Run the build script with desired parameters:
 * `$Arch` - Program architecture. Valid values:
     * `32`
     * `64`
-* `$Proxy` - Proxy DLL to build. Any system DLL is valid.
 * `$Config` - Build configuration. Valid values:
     * `Debug`
     * `Release`
     * `RelWithDebInfo`
+* `$Proxy` - Proxy DLL to build. Any system DLL is valid.
 
 Example:
 
 ```shell
-./build.ps1 64 d3d11 Release
+./build.ps1 64 Release d3d11
 ```
 
 The final DLL will be located at
