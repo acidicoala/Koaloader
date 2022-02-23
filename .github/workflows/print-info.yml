@@ -1,0 +1,13 @@
+name: Print information
+on: workflow_dispatch
+
+jobs:
+  print_dlls:
+    name: Print system DLLs
+    runs-on: windows-2022
+    steps:
+      - name: Print 64-bit system DLLs
+        run: ls C:/Windows/System32
+
+      - name: Print 32-bit system DLLs
+        run: ls C:/Windows/SysWOW64

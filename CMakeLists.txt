@@ -1,12 +1,18 @@
 cmake_minimum_required(VERSION 3.21)
 
+if (NOT DEFINED PROXY_DLL)
+    set(PROXY_DLL $ENV{PROXY_DLL})
+endif ()
+
+if ("${PROXY_DLL}" STREQUAL "")
+    message(FATAL_ERROR "PROXY_DLL must be provided either as a parameter or environment variable")
+endif ()
+
 include(KoalaBox/KoalaBox.cmake)
 
 configure_globals(KoalaBox)
 
 project(Koaloader VERSION 2.0.0)
-
-set(PROXY_DLL $ENV{PROXY_DLL})
 
 configure_version_resource("https://github.com/acidicoala/Koaloader")
 

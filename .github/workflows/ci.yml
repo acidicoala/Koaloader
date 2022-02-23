@@ -1,0 +1,40 @@
+name: Continuous Integration
+on: push
+
+jobs:
+  ci:
+    name: CI
+    uses: acidicoala/KoalaBox/.github/workflows/build-and-package.yml@6d72f1af04406f3c20f85cf64de0cb2c4e7686d9
+    permissions:
+      contents: write
+    with:
+      modules: >-
+        [
+          "audioses",
+          "d3d9",
+          "d3d10",
+          "d3d11",
+          "dinput8",
+          "dwmapi",
+          "dxgi",
+          "glu32",
+          "hid",
+          "iphlpapi",
+          "msasn1",
+          "opengl32",
+          "profapi",
+          "propsys",
+          "version",
+          "winhttp",
+          "wldp",
+          "winmm",
+          "xinput9_1_0"
+        ]
+        
+
+      cmake_options: -DPROXY_DLL=$MODULE
+
+      zip_command: >
+        cp res/Koaloader.json artifacts/Koaloader.json
+        cd artifacts
+        zip ../$ZIP_NAME ./* -r
