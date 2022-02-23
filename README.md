@@ -77,7 +77,7 @@ You can refer to the following config as an example.
 
 * Git v2.13 or newer
 * CMake 3.21 or newer
-* VS 2019 Build Tools/IDE with Desktop Development with C++ installed.
+* Visual Studio 2022 Build Tools/IDE with "**Desktop Development with C++**" installed.
 
 ___
 Clone the project with its submodules:
