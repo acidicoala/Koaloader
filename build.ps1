@@ -10,7 +10,7 @@ $proxy = $args[2]
 if ($proxy -eq '') {
     throw "Proxy DLL cannot be empty."
 } else {
-    $Env:PROXY_DLL = $proxy
+    $Env:MODULE = $proxy
 }
 
 $Env:BUILD_DIR = "build\$arch\$proxy"

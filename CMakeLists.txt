@@ -1,12 +1,10 @@
 cmake_minimum_required(VERSION 3.21)
 
-if (NOT DEFINED PROXY_DLL)
-    set(PROXY_DLL $ENV{PROXY_DLL})
+if ($ENV{MODULE} STREQUAL "")
+    message(FATAL_ERROR "Environment variable 'MODULE' must be set")
 endif ()
 
-if ("${PROXY_DLL}" STREQUAL "")
-    message(FATAL_ERROR "PROXY_DLL must be provided either as a parameter or environment variable")
-endif ()
+set(PROXY_DLL $ENV{MODULE})
 
 include(KoalaBox/KoalaBox.cmake)
 
