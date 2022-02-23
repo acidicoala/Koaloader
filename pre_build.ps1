@@ -1,0 +1,1 @@
+$Env:PROXY_DLL = $Env:MODULE

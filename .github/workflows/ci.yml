@@ -4,7 +4,7 @@ on: push
 jobs:
   ci:
     name: CI
-    uses: acidicoala/KoalaBox/.github/workflows/build-and-package.yml@da118e900dc51ff31b6730c4bcdbd28ed68c92a0
+    uses: acidicoala/KoalaBox/.github/workflows/build-and-package.yml@041caa84bdd2dd621f1876e0e7e0b4266a97f1cb
     permissions:
       contents: write
     with:
@@ -13,9 +13,6 @@ jobs:
           "version"
         ]
         
-
-      cmake_options: -DPROXY_DLL=${{ matrix.module }}
-
       zip_command: >
         cp res/Koaloader.json artifacts/Koaloader.json
         cd artifacts
