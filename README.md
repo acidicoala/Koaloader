@@ -89,7 +89,7 @@ git clone --recurse-submodules https://github.com/acidicoala/Koaloader.git
 Run the build script with desired parameters:
 
 ```shell
-./build.ps1 $Arch $Proxy $Config
+./build.ps1 $Arch $Config $Proxy
 ```
 
 * `$Arch` - Program architecture. Valid values:
@@ -99,7 +99,7 @@ Run the build script with desired parameters:
     * `Debug`
     * `Release`
     * `RelWithDebInfo`
-* `$Proxy` - Proxy DLL to build. Any system DLL is valid.
+* `$Proxy` - Proxy DLL to build. Any DLL from `C:/Windows/System32 `is valid.
 
 Example:
 
@@ -121,7 +121,7 @@ The final DLL will be located at
 - CMake project likely needs to be reloaded after changing files in the [res](./res) directory.
 - GitHub actions will build the project on every push to `master`, but will prepare a draft release only if the last
   commit was tagged.
-- Proxy dll need to be defined in [build-project.yml](.github/workflows/build-project.yml)
+- Proxy dll need to be defined in [ci.yml](.github/workflows/ci.yml)
 
 ## 👋 Acknowledgements
 

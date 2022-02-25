@@ -52,10 +52,14 @@ namespace koaloader {
 
         logger->info("🐨 {} 📥 v{}", PROJECT_NAME, PROJECT_VERSION);
 
-        if (is_loaded_by_target()) {
-            inject_modules();
+        if (config.enabled) {
+            if (is_loaded_by_target()) {
+                inject_modules();
+            } else {
+                logger->debug("Not loaded by target process. Skipping injections.");
+            }
         } else {
-            logger->debug("Not loaded by target process. Skipping injections.");
+            logger->debug("Koaloader is not enabled in config");
         }
 
         logger->info("🚀 Initialization complete");

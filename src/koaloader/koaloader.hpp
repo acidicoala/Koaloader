@@ -13,10 +13,11 @@ namespace koaloader {
 
     struct Config {
         bool logging = false;
-        Vector <String> targets;
-        Vector <Module> modules;
+        bool enabled = true;
+        Vector<String> targets;
+        Vector<Module> modules;
 
-        NLOHMANN_DEFINE_TYPE_INTRUSIVE(Config, logging, targets, modules)
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(Config, logging, enabled, targets, modules)
     };
 
     extern Config config;
