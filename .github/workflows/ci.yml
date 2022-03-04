@@ -24,6 +24,7 @@ jobs:
           "opengl32",
           "profapi",
           "propsys",
+          "textshaping",
           "version",
           "winhttp",
           "wldp",

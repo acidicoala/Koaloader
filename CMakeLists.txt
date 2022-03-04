@@ -10,12 +10,13 @@ include(KoalaBox/KoalaBox.cmake)
 
 configure_globals(KoalaBox)
 
-project(Koaloader VERSION 2.1.0)
+project(Koaloader VERSION 2.2.0)
 
 configure_version_resource("https://github.com/acidicoala/Koaloader")
 
 configure_exports_generator()
 configure_linker_exports(
+    false
     "C:/Windows/System32/${PROXY_DLL}"
     "C:/Windows/System32/${PROXY_DLL}.dll"
     ${SRC_DIR}
