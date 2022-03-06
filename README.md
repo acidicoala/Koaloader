@@ -26,6 +26,7 @@ Simply place one of the proxy dlls where a process is attempting to load it and 
 - [x] **opengl32.dll**
 - [x] **profapi.dll**
 - [x] **propsys.dll**
+- [x] **textshaping.dll**
 - [x] **version.dll**
 - [x] **winhttp.dll**
 - [x] **wldp.dll**
@@ -42,16 +43,12 @@ Koaloader comes with a configuration file `Koaloader.json`, which will be the sa
 
 * `logging`: Enables or disables logging into a `Koaloader.log` file. Possible values: `true`, `false` (default).
 * `enabled`: Entirely enables or disables Koaloader injection. Can be used to quickly disable Koaloader without modifying files on disk. Possible values: `true` (default), `false`.
-* `auto_load`: Enables or disables automatic loading of well-known DLLs. This can be used to automatically inject DLLs without `Koaloader.json` config file. When enabled, Koaloader will first try to find a well-known DLL in parent directories. If it failed to do so, it will recursively go through all files in current working directory (which may be different from executable or Koaloader directory) and search for files with well-known file names. Default: `true`. A list of well-known file names:
-  * `Unlocker.dll`
-  * `Unlocker32.dll`
-  * `Unlocker64.dll`
-  * `Lyptus.dll`
-  * `Lyptus32.dll`
-  * `Lyptus64.dll`
-  * `ScreamAPI.dll`
-  * `UplayR1Unlocker.dll`
-  * `UplayR2Unlocker.dll`
+* `auto_load`: Enables or disables automatic loading of well-known DLLs. This can be used to automatically inject DLLs without `Koaloader.json` config file. When enabled, Koaloader will first try to find a well-known DLL in parent directories. If it failed to do so, it will recursively go through all files in current working directory (which may be different from executable or Koaloader directory) and search for files with well-known file names. Default: `true`. A list of well-known file names (Names ending in 32 and 64 are loaded only by 32-bit and 64-bit binaries respectively):
+  * `Unlocker.dll`, `Unlocker32.dll`, `Unlocker64.dll`
+  * `Lyptus.dll`, `Lyptus32.dll`, `Lyptus64.dll`
+  * `ScreamAPI.dll`,`ScreamAPI32.dll`,`ScreamAPI64.dll`
+  * `UplayR1Unlocker.dll`, `UplayR1Unlocker32.dll`, `UplayR1Unlocker64.dll`
+  * `UplayR2Unlocker.dll`, `UplayR2Unlocker32.dll`, `UplayR2Unlocker64.dll`
 * `targets`: A list of strings that specify targeted executables. This can be used to prevent unintended loading by irrelevant executables. Koaloader will inject modules if, and only if:
   * The list of targets is empty, **or**
   * The list of targets includes the executable that has loaded Koaloader.

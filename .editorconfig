@@ -333,8 +333,10 @@ ij_json_spaces_within_braces = false
 ij_json_spaces_within_brackets = false
 ij_json_wrap_long_lines = false
 
-[{*.apinotes,*.yaml,*.yml,.clang-format,.clang-tidy,_clang-format}]
+[{*.md,*.apinotes,*.yaml,*.yml,.clang-format,.clang-tidy,_clang-format}]
 indent_size = 2
+max_line_length = 1000
+
 
 [/src/exports/**]
 max_line_length = 1000
