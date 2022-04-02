@@ -10,7 +10,7 @@ include(KoalaBox/KoalaBox.cmake)
 
 configure_globals(KoalaBox)
 
-project(Koaloader VERSION 2.2.0)
+project(Koaloader VERSION 2.3.0)
 
 configure_version_resource("https://github.com/acidicoala/Koaloader")
 
