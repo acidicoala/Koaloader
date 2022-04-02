@@ -30,6 +30,7 @@ namespace koaloader {
             "Unlocker",
             "Lyptus",
             "ScreamAPI",
+            "SmokeAPI",
             "UplayR1Unlocker",
             "UplayR2Unlocker",
         };
@@ -188,5 +189,4 @@ namespace koaloader {
     void shutdown() {
         logger->info("💀 Shutdown complete");
     }
-
 }

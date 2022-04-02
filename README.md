@@ -23,6 +23,7 @@ Simply place one of the proxy dlls where a process is attempting to load it and 
 - [x] **hid.dll**
 - [x] **iphlpapi.dll**
 - [x] **msasn1.dll**
+- [x] **mswsock.dll**
 - [x] **opengl32.dll**
 - [x] **profapi.dll**
 - [x] **propsys.dll**
