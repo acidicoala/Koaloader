@@ -37,3 +37,5 @@ jobs:
         cp res/Koaloader.json artifacts/Koaloader.json &&
         cd artifacts &&
         zip ../$ZIP_NAME ./* -r
+
+      config: Release
