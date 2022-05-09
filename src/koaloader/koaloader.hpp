@@ -1,6 +1,8 @@
 #pragma once
 
-#include <build_config.h>
+#include <koalabox/koalabox.hpp>
+
+#include <nlohmann/json.hpp>
 
 namespace koaloader {
     using namespace koalabox;
@@ -9,7 +11,7 @@ namespace koaloader {
         String path;
         bool required = true;
 
-        NLOHMANN_DEFINE_TYPE_INTRUSIVE(Module, path, required)
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(Module, path, required)
     };
 
     struct Config {
@@ -19,7 +21,7 @@ namespace koaloader {
         Vector<String> targets;
         Vector<Module> modules;
 
-        NLOHMANN_DEFINE_TYPE_INTRUSIVE(Config, logging, enabled, auto_load, targets, modules)
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(Config, logging, enabled, auto_load, targets, modules)
     };
 
     extern Config config;

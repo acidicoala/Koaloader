@@ -1,47 +1,41 @@
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 3.22)
 
-if ($ENV{MODULE} STREQUAL "")
-    message(FATAL_ERROR "Environment variable 'MODULE' must be set")
+project(Koaloader VERSION 2.3.1)
+
+include(KoalaBox/cmake/KoalaBox.cmake)
+
+add_subdirectory(KoalaBox EXCLUDE_FROM_ALL)
+
+# Get module variable
+SET(MODULE "" CACHE STRING "Some user-specified option")
+if (NOT MODULE)
+    message(FATAL_ERROR "Option 'MODULE' must be set")
 endif ()
-
-set(PROXY_DLL $ENV{MODULE})
-
-include(KoalaBox/KoalaBox.cmake)
-
-configure_globals(KoalaBox)
-
-project(Koaloader VERSION 2.3.0)
 
 configure_version_resource("https://github.com/acidicoala/Koaloader")
 
-configure_exports_generator()
+# Setup linker exports
+
+set(
+    KOALOADER_SOURCES
+    src/koaloader/koaloader.cpp
+    src/koaloader/koaloader.hpp
+    src/main.cpp
+)
+
 configure_linker_exports(
-    false
-    "C:/Windows/System32/${PROXY_DLL}"
-    "C:/Windows/System32/${PROXY_DLL}.dll"
-    ${SRC_DIR}
+    FORWARDED_DLL "C:/Windows/System32/${MODULE}"
+    INPUT_SOURCES_DIR ""
+    INPUT_DLLS "C:/Windows/System32/${MODULE}.dll"
+    DEP_SOURCES "${KOALOADER_SOURCES}"
 )
 
 configure_build_config()
 
-configure_library(
-    SHARED
+add_library(Koaloader SHARED ${KOALOADER_SOURCES} ${GENERATED_LINKER_EXPORTS} ${VERSION_RESOURCE})
 
-    ${SRC_DIR}/koaloader/koaloader.cpp
-    ${SRC_DIR}/main.cpp
-
-    ${KOALABOX_SRC_DIR}/koalabox/loader/loader.cpp
-    ${KOALABOX_SRC_DIR}/koalabox/file_logger/file_logger.cpp
-    ${KOALABOX_SRC_DIR}/koalabox/util/util.cpp
-    ${KOALABOX_SRC_DIR}/koalabox/win_util/win_util.cpp
-
-    ${LINKER_EXPORTS}
-)
-
-configure_precompile_headers(${CMAKE_PROJECT_NAME} ${SRC_DIR}/pch.hpp)
-
-configure_output_name(${PROXY_DLL})
+configure_output_name(${MODULE})
 
 configure_include_directories()
 
-configure_dependencies(${CMAKE_PROJECT_NAME} spdlog nlohmann_json)
+target_link_libraries(Koaloader PRIVATE KoalaBox)

@@ -48,6 +48,7 @@ Koaloader comes with a configuration file `Koaloader.json`, which will be the sa
   * `Unlocker.dll`, `Unlocker32.dll`, `Unlocker64.dll`
   * `Lyptus.dll`, `Lyptus32.dll`, `Lyptus64.dll`
   * `ScreamAPI.dll`,`ScreamAPI32.dll`,`ScreamAPI64.dll`
+  * `SmokeAPI.dll`,`SmokeAPI32.dll`,`SmokeAPI64.dll`
   * `UplayR1Unlocker.dll`, `UplayR1Unlocker32.dll`, `UplayR1Unlocker64.dll`
   * `UplayR2Unlocker.dll`, `UplayR2Unlocker32.dll`, `UplayR2Unlocker64.dll`
 * `targets`: A list of strings that specify targeted executables. This can be used to prevent unintended loading by irrelevant executables. Koaloader will inject modules if, and only if:
@@ -88,7 +89,7 @@ You can refer to the following config as an example.
 ### 🚥 Prerequisites
 
 * Git v2.13 or newer
-* CMake 3.21 or newer
+* CMake 3.22 or newer
 * Visual Studio 2022 Build Tools/IDE with "**Desktop Development with C++**" installed.
 
 ___

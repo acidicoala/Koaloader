@@ -1,4 +1,12 @@
-#include "koaloader.hpp"
+#include <koaloader/koaloader.hpp>
+
+#include <koalabox/win_util.hpp>
+#include <koalabox/util.hpp>
+#include <koalabox/loader.hpp>
+#include <koalabox/config_parser.hpp>
+#include <koalabox/file_logger.hpp>
+
+#include <build_config.h>
 
 namespace koaloader {
 
