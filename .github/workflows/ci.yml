@@ -21,6 +21,7 @@ jobs:
           "hid",
           "iphlpapi",
           "msasn1",
+          "msimg32",
           "mswsock",
           "opengl32",
           "profapi",
