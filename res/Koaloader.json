@@ -1,12 +1,7 @@
 {
   "logging": true,
   "enabled": true,
-  "auto_load": false,
-  "targets": ["program.exe"],
-  "modules": [
-    {
-      "path": "Target.dll",
-      "required": true
-    }
-  ]
+  "auto_load": true,
+  "targets": [],
+  "modules": []
 }

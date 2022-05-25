@@ -178,6 +178,11 @@ namespace koaloader {
 
             logger->info("🐨 {} 📥 v{}", PROJECT_NAME, PROJECT_VERSION);
 
+            const auto exe_path = Path(win_util::get_module_file_name_or_throw(nullptr));
+            const auto exe_bitness = util::is_x64() ? 64 : 32;
+            logger->debug(R"(Executable path: "{}" [{}-bit])", exe_path.string(), exe_bitness);
+            logger->debug(R"(Current working directory: "{}")", std::filesystem::current_path().string());
+
             if (config.enabled) {
                 if (is_loaded_by_target()) {
                     inject_modules();
