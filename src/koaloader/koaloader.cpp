@@ -12,6 +12,10 @@ namespace koaloader {
 
     const auto bitness = std::to_string(8 * sizeof(uintptr_t));
 
+    Path self_directory;
+
+    bool loaded = false;
+
     bool is_loaded_by_target() {
         if (config.targets.empty()) {
             return true;
@@ -58,6 +62,8 @@ namespace koaloader {
             koalabox::win_util::load_library_or_throw(path);
 
             LOG_INFO(R"(✅ Loaded module: "{}")", path.string())
+
+            loaded = true;
         } catch (const Exception& e) {
             const auto message = fmt::format(
                 "Error loading module \"{}\":\n\t{}", path.string(), e.what()
@@ -159,9 +165,24 @@ namespace koaloader {
             }
         } else {
             for (const auto& module: config.modules) {
-                const auto path = absolute(module.path);
+                auto path = Path(module.path);
 
-                inject_module(path, module.required);
+                if (path.is_absolute()) {
+                    inject_module(path, module.required);
+                } else {
+                    inject_module(path, false);
+
+                    if (not loaded) {
+                        inject_module(self_directory / path, false);
+                    }
+
+                    if (not loaded) {
+                        koalabox::util::panic(
+                            "Error loading module with relative path. Search locations:\n{}\n{}",
+                            absolute(path).string(), absolute(self_directory / path).string()
+                        );
+                    }
+                }
             }
         }
     }
@@ -170,11 +191,13 @@ namespace koaloader {
         try {
             DisableThreadLibraryCalls(self_module);
 
-            const auto self_directory = koalabox::loader::get_module_dir(self_module);
+            self_directory = koalabox::loader::get_module_dir(self_module);
 
-            const auto config_path = self_directory / "Koaloader.config.json";
-            const auto config_str = koalabox::io::read_file(config_path);
-            config = Json::parse(config_str);
+            try {
+                const auto config_path = self_directory / "Koaloader.config.json";
+                const auto config_str = koalabox::io::read_file(config_path);
+                config = Json::parse(config_str);
+            } catch (const Exception& e) {}
 
             if (config.logging) {
                 koalabox::logger::init_file_logger(self_directory / "Koaloader.log.log");
@@ -189,8 +212,11 @@ namespace koaloader {
 
             if (config.enabled) {
                 if (is_loaded_by_target()) {
-                    inject_modules(std::filesystem::absolute("."));
                     inject_modules(self_directory);
+
+                    if (not loaded) {
+                        inject_modules(std::filesystem::absolute("."));
+                    }
                 } else {
                     LOG_DEBUG("Not loaded by target process. Skipping injections.")
                 }

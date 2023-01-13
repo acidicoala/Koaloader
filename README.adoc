@@ -43,7 +43,7 @@ NOTE: ➕ If you wish to see another proxy DLL supported, feel free to request i
 
 == ⚙ Configuration
 
-:fn-search-dirs: search directoriesfootnote:fn-search-dirs[Search directories include the working directory of the target process as well as the directory where Koaloader DLL is located.]
+:fn-search-dirs: search directoriesfootnote:fn-search-dirs[Search directories include  the directory where Koaloader DLL is located as well as the working directory of the target process.]
 
 Koaloader comes with a configuration file `Koaloader.config.json`, which will be the same for any proxy dll.
 The config file conforms to the standard JSON format.
