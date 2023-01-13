@@ -1,0 +1,203 @@
+= 🐨 Koaloader 📥
+
+A collection of DLLs that use search order hijacking to automatically inject specified DLLs.
+
+== 🔗 Links
+
+https://cs.rin.ru/forum/viewtopic.php?p=2536753#p2536753[Official forum topic]
+
+== 🚀 Usage
+
+Simply place one of the proxy dlls where a process is attempting to load it and set up the config file to load the DLLs that you wish to inject.
+
+=== 📚 Supported proxies
+
+NOTE: ➕ If you wish to see another proxy DLL supported, feel free to request it in the official forum topic, specifying the DLL name and describing its use case.
+
+.Click to see all proxies
+[%collapsible]
+====
+* [x] *audioses.dll*
+* [x] *d3d9.dll*
+* [x] *d3d10.dll*
+* [x] *d3d11.dll*
+* [x] *dinput8.dll*
+* [x] *dwmapi.dll*
+* [x] *dxgi.dll*
+* [x] *glu32.dll*
+* [x] *hid.dll*
+* [x] *iphlpapi.dll*
+* [x] *msasn1.dll*
+* [x] *msimg32.dll*
+* [x] *mswsock.dll*
+* [x] *opengl32.dll*
+* [x] *profapi.dll*
+* [x] *propsys.dll*
+* [x] *textshaping.dll*
+* [x] *version.dll*
+* [x] *winhttp.dll*
+* [x] *wldp.dll*
+* [x] *winmm.dll*
+* [x] *xinput9_1_0.dll*
+====
+
+== ⚙ Configuration
+
+:fn-search-dirs: search directoriesfootnote:fn-search-dirs[Search directories include the working directory of the target process as well as the directory where Koaloader DLL is located.]
+
+Koaloader comes with a configuration file `Koaloader.config.json`, which will be the same for any proxy dll.
+The config file conforms to the standard JSON format.
+The description of each available option is presented below:
+
+`logging`::
+Enables or disables logging into a `Koaloader.log` file.
+Possible values: `true`, `false` (default).
+
+`enabled`::
+Entirely enables or disables Koaloader injection.
+Can be used to quickly disable Koaloader without modifying files on disk.
+Possible values: `true` (default), `false`.
+
+`auto_load`:: Enables or disables automatic loading of well-known DLLs.
+This can be used to automatically inject DLLs without `Koaloader.config.json` config file.
+When enabled, Koaloader will first try to find a well-known DLL in parent directories of the {fn-search-dirs}.
+If it failed to do so, it will recursively go through all files in {fn-search-dirs} directory and search for files with well-known file names.
+Default: `true`.
+A list of well-known filenames (Names ending in 32 and 64 are loaded only by 32-bit and 64-bit binaries respectively):
+* `Unlocker.dll`, `Unlocker32.dll`, `Unlocker64.dll`
+* `Lyptus.dll`, `Lyptus32.dll`, `Lyptus64.dll`
+* `ScreamAPI.dll`,`ScreamAPI32.dll`,`ScreamAPI64.dll`
+* `SmokeAPI.dll`,`SmokeAPI32.dll`,`SmokeAPI64.dll`
+* `UplayR1Unlocker.dll`, `UplayR1Unlocker32.dll`, `UplayR1Unlocker64.dll`
+* `UplayR2Unlocker.dll`, `UplayR2Unlocker32.dll`, `UplayR2Unlocker64.dll`
+
+`targets`::
+A list of strings that specify targeted executables.
+This can be used to prevent unintended loading by irrelevant executables.
+Koaloader will inject modules if, and only if:
+* The list of targets is empty, **or**
+* The list of targets includes an executable that has loaded Koaloader.
+
+`modules`:: A list of objects that describe modules that will be loaded in the order they were defined.
+Each object has the following properties:
++
+[horizontal]
+`path`::: A string that specifies absolute or relative path to a DLL.
+The relative path is with respect to the working directory, which may be different from the executable directory.
+`required`::: A boolean that marks the module as required for loading.
+This can be used to specify behaviour when Koaloader fails to load a given module.
+Failure to load required modules will result in a crash with message box, whereas in not required modules Koaloader will simply print the error in the log file.
+Default: `true`.
+
+You can refer to the following config as an example.
+
+[sidebar]
+
+--
+
+Here we have defined 2 DLLs to load:
+
+* `target.dll` - via a path that is relative to the current working directory of the executable
+* `eucalyptus.dll` - via an absolute path.
+
+[source,json]
+----
+{
+  "logging": true,
+  "enabled": true,
+  "auto_load": false,
+  "targets": [
+    "program32.exe",
+    "program64.exe"
+  ],
+  "modules": [
+    {
+      "path": "target.dll",
+      "required": true
+    },
+    {
+      "path": "C:/users/acidicoala/eucalyptus.dll",
+      "required": false
+    }
+  ]
+}
+----
+--
+
+== 🏗️ Building from source
+
+=== 🚦 Requirements
+
+:fn-lower-ver: footnote:lower-versions[Older versions may be supported as well.]
+
+* CMake v3.24 (Make sure that cmake is available from powershell)
+* Visual Studio 2022{fn-lower-ver}.
+* Tested on Windows 11 SDK (10.0.22621.0){fn-lower-ver}.
+
+=== 👨‍💻 Commands
+
+Clone the project with its submodules:
+
+[source,powershell]
+----
+git clone --recurse-submodules https://github.com/acidicoala/Koaloader.git
+----
+
+Run the build script with desired parameters:
+
+[source,powershell]
+----
+./build.ps1 $Arch $Config $Proxy
+----
+
+where
+
+[horizontal]
+`$Arch`:: Program architecture.
+Valid values:
+* `32`
+* `64`
+
+`$Config`:: Build configuration.
+Valid values:
+* `Debug`
+* `Release`
+* `RelWithDebInfo`
+
+`$Proxy`:: Proxy DLL to build.
+Any DLL from `C:/Windows/System32` that includes only named exports is valid.
+
+Example:
+
+[source,powershell]
+----
+./build.ps1 64 Release d3d11
+----
+
+The final DLL will be located at
+`build\$Arch\$Proxy\$Config`
+
+=== Potential improvements
+
+* [ ] DLLs with unnamed exports (by ordinal)
+* [ ] DLLs that are missing from System32 directory
+
+=== Miscellaneous notes
+
+* Version is defined in link:CMakeLists.txt[CMakeLists.txt]
+* CMake project likely needs to be reloaded after changing files in the link:res[res] directory.
+* GitHub actions will build the project on every push to `master`, but will prepare a draft release only if the last commit was tagged.
+* Proxy DLLs for CI releases need to be defined in link:.github/workflows/ci.yml[ci.yml]
+
+== 👋 Acknowledgements
+
+SmokeAPI makes use of the following open source projects:
+
+* https://github.com/libcpr/cpr[C++ Requests]
+* https://github.com/nlohmann/json[JSON for Modern C++]
+* https://github.com/stevemk14ebr/PolyHook_2_0[PolyHook 2]
+* https://github.com/gabime/spdlog[spdlog]
+
+== 📄 License
+
+This software is licensed under the https://unlicense.org/[Unlicense], terms of which are available in link:UNLICENSE.txt[UNLICENSE.txt]

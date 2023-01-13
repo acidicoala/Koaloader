@@ -1,30 +1,30 @@
 #include <koaloader/koaloader.hpp>
-
+#include <build_config.h>
+#include <koalabox/io.hpp>
+#include <koalabox/loader.hpp>
+#include <koalabox/logger.hpp>
 #include <koalabox/win_util.hpp>
 #include <koalabox/util.hpp>
-#include <koalabox/loader.hpp>
-#include <koalabox/config_parser.hpp>
-#include <koalabox/file_logger.hpp>
-
-#include <build_config.h>
 
 namespace koaloader {
 
     Config config = {};
+
+    const auto bitness = std::to_string(8 * sizeof(uintptr_t));
 
     bool is_loaded_by_target() {
         if (config.targets.empty()) {
             return true;
         }
 
-        const auto process_handle = win_util::get_module_handle(nullptr);
-        const auto executable_path = Path(win_util::get_module_file_name(process_handle));
+        const auto process_handle = koalabox::win_util::get_module_handle(nullptr);
+        const auto executable_path = Path(koalabox::win_util::get_module_file_name(process_handle));
         const auto executable_name = executable_path.filename().string();
 
         bool target_found = false;
         for (const auto& target: config.targets) {
-            if (util::strings_are_equal(target, executable_name)) {
-                logger->debug("Target found: '{}'", target);
+            if (target < equals > executable_name) {
+                LOG_DEBUG("Target found: '{}'", target)
                 target_found = true;
                 break;
             }
@@ -47,7 +47,7 @@ namespace koaloader {
 
         for (const auto& name: well_known_names) {
             well_known_modules.insert(name + ".dll");
-            well_known_modules.insert(name + (util::is_x64() ? "64" : "32") + ".dll");
+            well_known_modules.insert(name + bitness + ".dll");
         }
 
         return well_known_modules;
@@ -55,18 +55,18 @@ namespace koaloader {
 
     void inject_module(const Path& path, bool required) {
         try {
-            win_util::load_library_or_throw(path);
+            koalabox::win_util::load_library_or_throw(path);
 
-            logger->info("💉 Injected module: \"{}\"", path.string());
-        } catch (const Exception& ex) {
+            LOG_INFO(R"(✅ Loaded module: "{}")", path.string())
+        } catch (const Exception& e) {
             const auto message = fmt::format(
-                "Failed to inject module \"{}\":\n\t{}", path.string(), ex.what()
+                "Error loading module \"{}\":\n\t{}", path.string(), e.what()
             );
 
             if (required) {
-                util::panic(message);
+                koalabox::util::panic(message);
             } else {
-                logger->warn(message);
+                LOG_WARN("{}", message)
             }
         }
     }
@@ -90,6 +90,8 @@ namespace koaloader {
     }
 
     ControlOperation process_file(const std::filesystem::directory_entry& entry) {
+        LOG_TRACE(R"(Processing file: "{}")", entry.path().string())
+
         // Skip directories
         if (entry.is_directory()) {
             return ControlOperation::CONTINUE_OP;
@@ -103,7 +105,7 @@ namespace koaloader {
         }
 
         // Skip non-DLLs
-        if (not util::strings_are_equal(path.extension().string(), ".dll")) {
+        if (path.extension().string() < not_equals > ".dll") {
             return ControlOperation::CONTINUE_OP;
         }
 
@@ -112,7 +114,7 @@ namespace koaloader {
         const static auto well_known_modules = generate_well_known_modules();
 
         for (const auto& dll: well_known_modules) {
-            if (util::strings_are_equal(filename, dll)) {
+            if (filename < equals > dll) {
                 inject_module(path, true);
 
                 return ControlOperation::RETURN_OP;
@@ -122,13 +124,13 @@ namespace koaloader {
         return ControlOperation::NO_OP;
     }
 
-    void inject_modules() {
+    void inject_modules(const Path& starting_directory) {
         using namespace std::filesystem;
 
-        if (config.auto_load) {
-            logger->info("🤖 Entering auto-loading mode");
+        LOG_DEBUG(R"(Beginning search in "{}")", starting_directory.string())
 
-            const auto working_dir = absolute(".");
+        if (config.auto_load) {
+            LOG_INFO("🤖 Entering auto-loading mode")
 
             const static directory_options dir_options = (
                 directory_options::follow_directory_symlink |
@@ -136,9 +138,9 @@ namespace koaloader {
             );
 
             // First try searching in parent directories
-            logger->debug("Searching in parent directories");
+            LOG_DEBUG("Searching in parent directories")
 
-            auto current = working_dir;
+            auto current = starting_directory;
             Path previous;
             do {
                 for (const auto& entry: directory_iterator(current, dir_options)) {
@@ -150,9 +152,9 @@ namespace koaloader {
             } while (not equivalent(current, previous));
 
             // Then recursively go over all files in current working directory
-            logger->debug("Searching in subdirectories");
+            LOG_DEBUG("Searching in subdirectories")
 
-            for (const auto& entry: recursive_directory_iterator(working_dir, dir_options)) {
+            for (const auto& entry: recursive_directory_iterator(starting_directory, dir_options)) {
                 PROCESS_CONTROL_OPERATION(process_file(entry))
             }
         } else {
@@ -168,38 +170,41 @@ namespace koaloader {
         try {
             DisableThreadLibraryCalls(self_module);
 
-            const auto self_directory = loader::get_module_dir(self_module);
+            const auto self_directory = koalabox::loader::get_module_dir(self_module);
 
-            config = config_parser::parse<Config>(self_directory / PROJECT_NAME".json");
+            const auto config_path = self_directory / "Koaloader.config.json";
+            const auto config_str = koalabox::io::read_file(config_path);
+            config = Json::parse(config_str);
 
             if (config.logging) {
-                logger = file_logger::create(self_directory / PROJECT_NAME".log");
+                koalabox::logger::init_file_logger(self_directory / "Koaloader.log.log");
             }
 
-            logger->info("🐨 {} 📥 v{}", PROJECT_NAME, PROJECT_VERSION);
+            LOG_INFO("🐨 {} 📥 v{} | Compiled at '{}'", PROJECT_NAME, PROJECT_VERSION, __TIMESTAMP__)
 
-            const auto exe_path = Path(win_util::get_module_file_name_or_throw(nullptr));
-            const auto exe_bitness = util::is_x64() ? 64 : 32;
-            logger->debug(R"(Executable path: "{}" [{}-bit])", exe_path.string(), exe_bitness);
-            logger->debug(R"(Current working directory: "{}")", std::filesystem::current_path().string());
+            const auto exe_path = koalabox::win_util::get_module_file_name_or_throw(nullptr);
+            LOG_DEBUG(R"(Executable path: "{}" [{}-bit])", exe_path, bitness)
+            LOG_DEBUG(R"(Current working directory: "{}")", std::filesystem::current_path().string())
+            LOG_DEBUG(R"(Koaloader directory: "{}")", self_directory.string())
 
             if (config.enabled) {
                 if (is_loaded_by_target()) {
-                    inject_modules();
+                    inject_modules(std::filesystem::absolute("."));
+                    inject_modules(self_directory);
                 } else {
-                    logger->debug("Not loaded by target process. Skipping injections.");
+                    LOG_DEBUG("Not loaded by target process. Skipping injections.")
                 }
             } else {
-                logger->debug("Koaloader is not enabled in config");
+                LOG_DEBUG("Koaloader is not enabled in config")
             }
 
-            logger->info("🚀 Initialization complete");
-        } catch (const Exception& ex) {
-            util::panic(fmt::format("Initialization error: {}", ex.what()));
+            LOG_INFO("🚀 Initialization complete")
+        } catch (const Exception& e) {
+            koalabox::util::panic("Initialization error: {}", e.what());
         }
     }
 
     void shutdown() {
-        logger->info("💀 Shutdown complete");
+        LOG_INFO("💀 Shutdown complete")
     }
 }

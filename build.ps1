@@ -4,7 +4,7 @@
 
 Set-Location (Get-Item $PSScriptRoot)
 
-. ./KoalaBox/build.ps1 @args
+. ./KoalaBox/build.ps1 KoalaBox @args
 
 $proxy = $args[2]
 if ($proxy -eq '') {

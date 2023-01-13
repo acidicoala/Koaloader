@@ -1,11 +1,8 @@
 #pragma once
 
-#include <koalabox/koalabox.hpp>
-
-#include <nlohmann/json.hpp>
+#include <koalabox/core.hpp>
 
 namespace koaloader {
-    using namespace koalabox;
 
     struct Module {
         String path;
@@ -29,4 +26,5 @@ namespace koaloader {
     void init(const HMODULE& self_module);
 
     void shutdown();
+
 }

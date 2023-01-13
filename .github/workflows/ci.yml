@@ -4,7 +4,7 @@ on: push
 jobs:
   ci:
     name: CI
-    uses: acidicoala/KoalaBox/.github/workflows/build-and-package.yml@9035588f1668acdfda8d24b7d0b054e49d4c8f29
+    uses: acidicoala/KoalaBox/.github/workflows/build-and-package.yml@15d5cfc2e515bc72e47da6c0c563820cff98551f
     permissions:
       contents: write
     with:
@@ -35,7 +35,7 @@ jobs:
         ]
         
       zip_command: >
-        cp res/Koaloader.json artifacts/Koaloader.json &&
+        cp res/Koaloader.config.json artifacts/Koaloader.config.json &&
         cd artifacts &&
         zip ../$ZIP_NAME ./* -r
 
