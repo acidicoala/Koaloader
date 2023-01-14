@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.24)
 
-project(Koaloader VERSION 3.0.0)
+project(Koaloader VERSION 3.0.2)
 
 include(KoalaBox/cmake/KoalaBox.cmake)
 
