@@ -18,7 +18,9 @@ namespace koaloader {
         Vector<String> targets;
         Vector<Module> modules;
 
-        NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(Config, logging, enabled, auto_load, targets, modules)
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(
+            Config, logging, enabled, auto_load, targets, modules
+        )
     };
 
     extern Config config;

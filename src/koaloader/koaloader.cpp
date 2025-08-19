@@ -1,13 +1,16 @@
-#include <koaloader/koaloader.hpp>
-#include <build_config.h>
+#include <koalabox/globals.hpp>
 #include <koalabox/io.hpp>
 #include <koalabox/loader.hpp>
 #include <koalabox/logger.hpp>
-#include <koalabox/win_util.hpp>
+#include <koalabox/str.hpp>
 #include <koalabox/util.hpp>
+#include <koalabox/win_util.hpp>
+
+#include <build_config.h>
+
+#include <koaloader/koaloader.hpp>
 
 namespace koaloader {
-
     Config config = {};
 
     const auto bitness = std::to_string(8 * sizeof(uintptr_t));
@@ -26,9 +29,9 @@ namespace koaloader {
         const auto executable_name = executable_path.filename().string();
 
         bool target_found = false;
-        for (const auto& target: config.targets) {
-            if (target < equals > executable_name) {
-                LOG_DEBUG("Target found: '{}'", target)
+        for (const auto& target : config.targets) {
+            if (koalabox::str::eq(target, executable_name)) {
+                LOG_DEBUG("Target found: '{}'", target);
                 target_found = true;
                 break;
             }
@@ -49,7 +52,7 @@ namespace koaloader {
 
         Set<String> well_known_modules;
 
-        for (const auto& name: well_known_names) {
+        for (const auto& name : well_known_names) {
             well_known_modules.insert(name + ".dll");
             well_known_modules.insert(name + bitness + ".dll");
         }
@@ -61,19 +64,18 @@ namespace koaloader {
         try {
             koalabox::win_util::load_library_or_throw(path);
 
-            LOG_INFO(R"(✅ Loaded module: "{}")", path.string())
+            LOG_INFO(R"(✅ Loaded module: "{}")", path.string());
 
             loaded = true;
         } catch (const Exception& e) {
-            const auto message = fmt::format(
-                "Error loading module \"{}\":\n\t{}", path.string(), e.what()
-            );
+            const auto message =
+                fmt::format("Error loading module \"{}\":\n\t{}", path.string(), e.what());
 
             if (required) {
                 koalabox::util::panic(message);
-            } else {
-                LOG_WARN("{}", message)
             }
+
+            LOG_WARN("{}", message);
         }
     }
 
@@ -82,21 +84,20 @@ namespace koaloader {
      * don't share a common interface, we have to use these dirty tricks
      * to keep the code DRY.
      */
-    enum class ControlOperation {
-        NO_OP,
-        CONTINUE_OP,
-        RETURN_OP
-    };
+    enum class ControlOperation { NO_OP, CONTINUE_OP, RETURN_OP };
 
-#define PROCESS_CONTROL_OPERATION(RESULT) \
-    switch (RESULT) {                     \
-        case ControlOperation::CONTINUE_OP: continue; \
-        case ControlOperation::RETURN_OP: return; \
-        case ControlOperation::NO_OP: {}; \
+#define PROCESS_CONTROL_OPERATION(RESULT)                                                          \
+    switch (RESULT) {                                                                              \
+    case ControlOperation::CONTINUE_OP:                                                            \
+        continue;                                                                                  \
+    case ControlOperation::RETURN_OP:                                                              \
+        return;                                                                                    \
+    case ControlOperation::NO_OP: {                                                                \
+    };                                                                                             \
     }
 
     ControlOperation process_file(const std::filesystem::directory_entry& entry) {
-        LOG_TRACE(R"(Processing file: "{}")", entry.path().string())
+        LOG_TRACE(R"(Processing file: "{}")", entry.path().string());
 
         // Skip directories
         if (entry.is_directory()) {
@@ -111,7 +112,7 @@ namespace koaloader {
         }
 
         // Skip non-DLLs
-        if (path.extension().string() < not_equals > ".dll") {
+        if (not koalabox::str::eq(path.extension().string(), ".dll")) {
             return ControlOperation::CONTINUE_OP;
         }
 
@@ -119,8 +120,8 @@ namespace koaloader {
 
         const static auto well_known_modules = generate_well_known_modules();
 
-        for (const auto& dll: well_known_modules) {
-            if (filename < equals > dll) {
+        for (const auto& dll : well_known_modules) {
+            if (koalabox::str::eq(filename, dll)) {
                 inject_module(path, true);
 
                 return ControlOperation::RETURN_OP;
@@ -133,23 +134,22 @@ namespace koaloader {
     void inject_modules(const Path& starting_directory) {
         using namespace std::filesystem;
 
-        LOG_DEBUG(R"(Beginning search in "{}")", starting_directory.string())
+        LOG_DEBUG(R"(Beginning search in "{}")", starting_directory.string());
 
         if (config.auto_load) {
-            LOG_INFO("🤖 Entering auto-loading mode")
+            LOG_INFO("Entering auto-loading mode");
 
-            const static directory_options dir_options = (
-                directory_options::follow_directory_symlink |
-                directory_options::skip_permission_denied
-            );
+            const static directory_options dir_options =
+                (directory_options::follow_directory_symlink |
+                 directory_options::skip_permission_denied);
 
             // First try searching in parent directories
-            LOG_DEBUG("Searching in parent directories")
+            LOG_DEBUG("Searching in parent directories");
 
             auto current = starting_directory;
             Path previous;
             do {
-                for (const auto& entry: directory_iterator(current, dir_options)) {
+                for (const auto& entry : directory_iterator(current, dir_options)) {
                     PROCESS_CONTROL_OPERATION(process_file(entry))
                 }
 
@@ -158,13 +158,14 @@ namespace koaloader {
             } while (not equivalent(current, previous));
 
             // Then recursively go over all files in current working directory
-            LOG_DEBUG("Searching in subdirectories")
+            LOG_DEBUG("Searching in subdirectories");
 
-            for (const auto& entry: recursive_directory_iterator(starting_directory, dir_options)) {
+            for (const auto& entry :
+                 recursive_directory_iterator(starting_directory, dir_options)) {
                 PROCESS_CONTROL_OPERATION(process_file(entry))
             }
         } else {
-            for (const auto& module: config.modules) {
+            for (const auto& module : config.modules) {
                 auto path = Path(module.path);
 
                 if (path.is_absolute()) {
@@ -179,7 +180,8 @@ namespace koaloader {
                     if (not loaded) {
                         koalabox::util::panic(
                             "Error loading module with relative path. Search locations:\n{}\n{}",
-                            absolute(path).string(), absolute(self_directory / path).string()
+                            absolute(path).string(),
+                            absolute(self_directory / path).string()
                         );
                     }
                 }
@@ -191,24 +193,32 @@ namespace koaloader {
         try {
             DisableThreadLibraryCalls(self_module);
 
+            koalabox::globals::init_globals(self_module, PROJECT_NAME);
+
             self_directory = koalabox::loader::get_module_dir(self_module);
 
-            try {
-                const auto config_path = self_directory / "Koaloader.config.json";
-                const auto config_str = koalabox::io::read_file(config_path);
-                config = Json::parse(config_str);
-            } catch (const Exception& e) {}
+            if (const auto config_path = self_directory / "Koaloader.config.json";
+                fs::exists(config_path)) {
+                try {
+                    const auto config_str = koalabox::io::read_file(config_path);
+                    config = Json::parse(config_str);
+                } catch (const std::exception& e) {
+                    koalabox::util::panic(std::format("Error reading config file: {}", e.what()));
+                }
+            }
 
             if (config.logging) {
                 koalabox::logger::init_file_logger(self_directory / "Koaloader.log.log");
             }
 
-            LOG_INFO("🐨 {} 📥 v{} | Compiled at '{}'", PROJECT_NAME, PROJECT_VERSION, __TIMESTAMP__)
+            LOG_INFO("{} v{} | Compiled at '{}'", PROJECT_NAME, PROJECT_VERSION, __TIMESTAMP__);
 
             const auto exe_path = koalabox::win_util::get_module_file_name_or_throw(nullptr);
-            LOG_DEBUG(R"(Executable path: "{}" [{}-bit])", exe_path, bitness)
-            LOG_DEBUG(R"(Current working directory: "{}")", std::filesystem::current_path().string())
-            LOG_DEBUG(R"(Koaloader directory: "{}")", self_directory.string())
+            LOG_DEBUG(R"(Executable path: "{}" [{}-bit])", exe_path, bitness);
+            LOG_DEBUG(
+                R"(Current working directory: "{}")", std::filesystem::current_path().string()
+            );
+            LOG_DEBUG(R"(Koaloader directory: "{}")", self_directory.string());
 
             if (config.enabled) {
                 if (is_loaded_by_target()) {
@@ -218,19 +228,19 @@ namespace koaloader {
                         inject_modules(std::filesystem::absolute("."));
                     }
                 } else {
-                    LOG_DEBUG("Not loaded by target process. Skipping injections.")
+                    LOG_DEBUG("Not loaded by target process. Skipping injections.");
                 }
             } else {
-                LOG_DEBUG("Koaloader is not enabled in config")
+                LOG_DEBUG("Koaloader is not enabled in config");
             }
 
-            LOG_INFO("🚀 Initialization complete")
+            LOG_INFO("Initialization complete");
         } catch (const Exception& e) {
             koalabox::util::panic("Initialization error: {}", e.what());
         }
     }
 
     void shutdown() {
-        LOG_INFO("💀 Shutdown complete")
+        LOG_INFO("💀 Shutdown complete");
     }
 }

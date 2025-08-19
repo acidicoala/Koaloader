@@ -189,15 +189,6 @@ The final DLL will be located at
 * GitHub actions will build the project on every push to `master`, but will prepare a draft release only if the last commit was tagged.
 * Proxy DLLs for CI releases need to be defined in link:.github/workflows/ci.yml[ci.yml]
 
-== 👋 Acknowledgements
-
-SmokeAPI makes use of the following open source projects:
-
-* https://github.com/libcpr/cpr[C++ Requests]
-* https://github.com/nlohmann/json[JSON for Modern C++]
-* https://github.com/stevemk14ebr/PolyHook_2_0[PolyHook 2]
-* https://github.com/gabime/spdlog[spdlog]
-
 == 📄 License
 
 This software is licensed under the https://unlicense.org/[Unlicense], terms of which are available in link:UNLICENSE.txt[UNLICENSE.txt]

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.24)
 
-project(Koaloader VERSION 3.0.2)
+project(Koaloader VERSION 3.0.3)
 
 include(KoalaBox/cmake/KoalaBox.cmake)
 
@@ -14,7 +14,7 @@ endif ()
 
 configure_version_resource("https://github.com/acidicoala/Koaloader")
 
-# Setup linker exports
+configure_build_config()
 
 set(
     KOALOADER_SOURCES
@@ -23,19 +23,18 @@ set(
     src/main.cpp
 )
 
+add_library(Koaloader SHARED ${KOALOADER_SOURCES} ${GENERATED_LINKER_EXPORTS} ${VERSION_RESOURCE})
+
 configure_linker_exports(
+    TARGET Koaloader
     FORWARDED_DLL "C:/Windows/System32/${MODULE}"
     INPUT_SOURCES_DIR ""
-    INPUT_DLLS "C:/Windows/System32/${MODULE}.dll"
-    DEP_SOURCES "${KOALOADER_SOURCES}"
+    DLL_FILES_GLOB "C:/Windows/System32/${MODULE}.dll"
 )
-
-configure_build_config()
-
-add_library(Koaloader SHARED ${KOALOADER_SOURCES} ${GENERATED_LINKER_EXPORTS} ${VERSION_RESOURCE})
 
 configure_output_name(${MODULE})
 
 configure_include_directories()
+target_precompile_headers(Koaloader REUSE_FROM KoalaBox)
 
 target_link_libraries(Koaloader PRIVATE KoalaBox)
