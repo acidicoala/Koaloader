@@ -1,4 +1,5 @@
 {
+  "$schema": "https://raw.githubusercontent.com/acidicoala/Koaloader/refs/tags/v3.0.3/res/Koaloader.schema.json",
   "logging": true,
   "enabled": true,
   "auto_load": true,

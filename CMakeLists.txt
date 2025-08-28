@@ -12,8 +12,6 @@ if (NOT MODULE)
     message(FATAL_ERROR "Option 'MODULE' must be set")
 endif ()
 
-configure_version_resource("https://github.com/acidicoala/Koaloader")
-
 configure_build_config()
 
 set(
@@ -23,18 +21,19 @@ set(
     src/main.cpp
 )
 
-add_library(Koaloader SHARED ${KOALOADER_SOURCES} ${GENERATED_LINKER_EXPORTS} ${VERSION_RESOURCE})
-
+add_library(Koaloader SHARED ${KOALOADER_SOURCES})
+target_link_libraries(Koaloader PRIVATE KoalaBox)
+configure_include_directories()
+configure_output_name(${MODULE})
+configure_version_resource(
+    TARGET Koaloader
+    FILE_DESC "Automatic DLL injector"
+    ORIG_NAME ${MODULE}
+)
 configure_linker_exports(
     TARGET Koaloader
+    HEADER_NAME "linker_exports"
     FORWARDED_DLL "C:/Windows/System32/${MODULE}"
     INPUT_SOURCES_DIR ""
     DLL_FILES_GLOB "C:/Windows/System32/${MODULE}.dll"
 )
-
-configure_output_name(${MODULE})
-
-configure_include_directories()
-target_precompile_headers(Koaloader REUSE_FROM KoalaBox)
-
-target_link_libraries(Koaloader PRIVATE KoalaBox)

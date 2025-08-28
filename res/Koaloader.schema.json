@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Koaloader Configuration Schema",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "The JSON schema URI describing this file."
+    },
+    "logging": {
+      "type": "boolean",
+      "description": "Enables or disables logging into a Koaloader.log file. Possible values: true, false (default)."
+    },
+    "enabled": {
+      "type": "boolean",
+      "description": "Entirely enables or disables Koaloader injection. Can be used to quickly disable Koaloader without modifying files on disk. Possible values: true (default), false."
+    },
+    "auto_load": {
+      "type": "boolean",
+      "description": "Enables or disables automatic loading of well-known DLLs. When enabled, Koaloader will try to find well-known DLLs in parent directories or recursively in the search directories. Default: true."
+    },
+    "targets": {
+      "type": "array",
+      "description": "A list of strings that specify targeted executables. Koaloader will inject modules if the list is empty or includes the executable.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "modules": {
+      "type": "array",
+      "description": "A list of objects that describe modules that will be loaded in the order they were defined.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "A string that specifies absolute or relative path to a DLL. The relative path is with respect to the working directory."
+          },
+          "required": {
+            "type": "boolean",
+            "description": "A boolean that marks the module as required for loading. Failure to load required modules will result in a crash. Default: true."
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "$schema": "https://raw.githubusercontent.com/acidicoala/Koaloader/refs/tags/v3.0.3/res/Koaloader.schema.json",
+      "logging": true,
+      "enabled": true,
+      "auto_load": false,
+      "targets": [
+        "program32.exe",
+        "program64.exe"
+      ],
+      "modules": [
+        {
+          "path": "target.dll",
+          "required": true
+        },
+        {
+          "path": "C:/users/acidicoala/eucalyptus.dll",
+          "required": false
+        }
+      ]
+    }
+  ]
+}

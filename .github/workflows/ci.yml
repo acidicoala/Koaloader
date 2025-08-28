@@ -4,10 +4,12 @@ on: push
 jobs:
   ci:
     name: CI
-    uses: acidicoala/KoalaBox/.github/workflows/build-and-package.yml@15d5cfc2e515bc72e47da6c0c563820cff98551f
+    uses: acidicoala/KoalaBox/.github/workflows/build-and-package.yml@57366d39a34c21f41606a1c0d1a3fc9684d16000
     permissions:
       contents: write
     with:
+      arch: '[ 32 ]'
+      config: Release
       modules: >-
         [
           "audioses",
@@ -33,10 +35,8 @@ jobs:
           "winmm",
           "xinput9_1_0"
         ]
-        
+
       zip_command: >
         cp res/Koaloader.config.json artifacts/Koaloader.config.json &&
         cd artifacts &&
         zip ../$ZIP_NAME ./* -r
-
-      config: Release

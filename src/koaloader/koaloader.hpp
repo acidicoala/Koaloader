@@ -1,11 +1,13 @@
 #pragma once
 
-#include <koalabox/core.hpp>
+#include <string>
+
+#include <nlohmann/json.hpp>
 
 namespace koaloader {
 
     struct Module {
-        String path;
+        std::string path;
         bool required = true;
 
         NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(Module, path, required)
@@ -15,8 +17,8 @@ namespace koaloader {
         bool logging = false;
         bool enabled = true;
         bool auto_load = true;
-        Vector<String> targets;
-        Vector<Module> modules;
+        std::vector<std::string> targets;
+        std::vector<Module> modules;
 
         NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(
             Config, logging, enabled, auto_load, targets, modules
@@ -25,7 +27,7 @@ namespace koaloader {
 
     extern Config config;
 
-    void init(const HMODULE& self_module);
+    void init(HMODULE self_module);
 
     void shutdown();
 
