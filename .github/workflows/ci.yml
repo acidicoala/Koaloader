@@ -8,7 +8,7 @@ jobs:
     permissions:
       contents: write
     with:
-      arch: '[ 32 ]'
+      arch: '[ 32, 64 ]'
       config: Release
       modules: >-
         [
